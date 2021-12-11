@@ -1,57 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import { useDispatch } from "react-redux";
+import { fetchMovie } from "./features/movie/movieSlice";
+import { Container, Button, TextField } from "@mui/material";
+import { Movie } from "./features/movie/Movie";
 
 function App() {
+  const [searchText, setSearchText] = useState("");
+  const dispatch = useDispatch();
+
+  const getSearchText = (e) => {
+    const searchTxt = e.target.value;
+    setSearchText(searchTxt);
+  };
+  const handleSearch = () => {
+    console.log("searching");
+    dispatch(fetchMovie({ searchText, page: 1}));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <Container className="main-container" maxWidth="xl">
+      <div className="search-bar">
+        <TextField
+          className="search-bar-input"
+          id="movie-name"
+          label="movie name"
+          color="primary"
+          variant="outlined"
+          onChange={(e) => getSearchText(e)}
+        />
+        <Button
+          className="search-bar-button"
+          variant="outlined"
+          color="primary"
+          onClick={handleSearch}
+        >
+          Search
+        </Button>
+      </div>
+      <div className="table-container">
+        <Movie searchText={searchText}/>
+      </div>
+    </Container>
   );
 }
 
