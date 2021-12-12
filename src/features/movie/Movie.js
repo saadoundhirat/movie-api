@@ -3,12 +3,12 @@ import { useSelector } from "react-redux";
 import { Backdrop } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ContentTable } from "./ContentTable";
-
+import { loadingEnum } from "./movieSlice";
 export const Movie = ({ searchText }) => {
-  const movieState = useSelector((state) => state.movie);
+  const movie = useSelector((state) => state.movie);
   return (
     <div>
-      {movieState.loading && (
+      {movie.loading === loadingEnum.pending && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={true}
@@ -16,10 +16,12 @@ export const Movie = ({ searchText }) => {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      {movieState.movies.results?.length > 0 && (
+
+      {movie.loading === loadingEnum.rejected && <div>{movie.error}</div>}
+
+      {movie.loading === loadingEnum.fulfilled && (
         <ContentTable searchText={searchText} />
       )}
-      {movieState.error && <div>{movieState.error}</div>}
     </div>
   );
 };

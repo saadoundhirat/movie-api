@@ -1,9 +1,15 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 
+export const loadingEnum = {
+    pending: 'pending',
+    fulfilled: 'fulfilled',
+    rejected: 'rejected',
+};
+
 
 const initialState = {
-    movies: [],
+    movies: {},
     loading: false,
     error: null,
 };
@@ -29,15 +35,19 @@ const movieSlice = createSlice({
     reducers: {},
     extraReducers: {
         [fetchMovie.pending]: (state, action) => {
-            state.loading = true;
+            state.loading = loadingEnum.pending;
+            state.movies = {};
+            state.error = null;
         }, 
         [fetchMovie.fulfilled]: (state, action) => {
-            state.loading = false;
+            state.loading = loadingEnum.fulfilled;
             state.movies = action.payload;
+            state.error = null;
         },
-        [fetchMovie.rejected]: (state, action) => {
-            state.loading = false;
-            state.error = action.error;
+        [fetchMovie.rejected]: (state, {error}) => {
+            state.loading = loadingEnum.rejected;
+            state.movies = {};
+            state.error = error.massage;
         }
     }
 });

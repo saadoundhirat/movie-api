@@ -13,14 +13,18 @@ import { fetchMovie } from "./movieSlice";
 export const ContentTable = ({ searchText }) => {
   const dispatch = useDispatch();
   const movie = useSelector((state) => state.movie);
+  console.log("---------the movie state is", movie);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(20);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
 
+
+  //! here is my problem with the pagination 
+  //! I can't set the page to the next page when I click on the next button that provided with the table pagination 
+  
   const handleChangePage = async (event, newPage) => {
-
     console.log("_____newPAGE______", newPage);
     await setPage((prevPage) => prevPage + Number(newPage + 1));
-    dispatch(fetchMovie({ searchText, page: page}));
+    dispatch(fetchMovie({ searchText, page: page }));
   };
 
   const handleChangeRowsPerPage = (event) => {
